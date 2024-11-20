@@ -1,2 +1,2 @@
-# eltrello
-The project eltrello is clone of Trello 
+# angular-trello
+The project angular-trello is clone of Trello 
