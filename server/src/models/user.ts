@@ -7,26 +7,30 @@ const userSchema = new Schema<UserDocument>(
   {
     email: {
       type: String,
-      required: [true, "Email is require"],
+      required: [true, "Email is required"],
       validate: [validator.isEmail, "invalid email"],
       createIndexes: { unique: true },
     },
-    userName: {
+    username: {
       type: String,
-      required: [true, "UserName is require"],
+      required: [true, "Username is required"],
     },
     password: {
       type: String,
-      required: [true, "Password is require"],
+      required: [true, "Password is required"],
       select: false,
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
+
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     return next();
   }
+
   try {
     const salt = await bcryptjs.genSalt(10);
     this.password = await bcryptjs.hash(this.password, salt);
@@ -39,4 +43,6 @@ userSchema.pre("save", async function (next) {
 userSchema.methods.validatePassword = function (password: string) {
   return bcryptjs.compare(password, this.password);
 };
+
 export default model<UserDocument>("User", userSchema);
+// export const User = mongoose.model("User", userSchema);
